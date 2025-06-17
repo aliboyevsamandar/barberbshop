@@ -21,7 +21,7 @@ const upload = require("../middlewares/upload.middleware");
  * @swagger
  * /api/barbers:
  *   post:
- *     summary:Add a new barber
+ *     summary: Add a new barber
  *     tags: [Barbers]
  *     security:
  *       - bearerAuth: []
@@ -66,6 +66,7 @@ router.post("/", upload.single("image"), authMiddleware, createBarber);
  *         description: A list of barbers
  */
 router.get("/", authMiddleware, getAllBarbers);
+
 /**
  * @swagger
  * /api/barbers/{id}:
@@ -97,7 +98,7 @@ router.get("/", authMiddleware, getAllBarbers);
  *                 format: binary
  *     responses:
  *       200:
- *         description:  Barber updated successfully
+ *         description: Barber updated successfully
  *       404:
  *         description: Barber not found
  */
