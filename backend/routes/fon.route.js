@@ -8,18 +8,38 @@ const authMiddleware = require("../middlewares/auth.middleware");
  * @swagger
  * tags:
  *   name: Fons
- *   description: Working with background images
+ *   description: Background (fon) rasmlarni boshqarish
  */
 
 /**
  * @swagger
  * /api/fons:
  *   get:
- *     summary: Get all background images
+ *     summary: Barcha background rasmlarni olish
+ *     description: Ushbu endpoint barcha fon rasmlarni olish uchun ishlatiladi.
  *     tags: [Fons]
  *     responses:
  *       200:
- *         description: A list of background images
+ *         description: Fonlar muvaffaqiyatli olindi
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                   name:
+ *                     type: string
+ *                     example: Gray background
+ *                   image:
+ *                     type: string
+ *                     example: https://yourdomain.com/uploads/gray.jpg
+ *                   createdAt:
+ *                     type: string
+ *                   updatedAt:
+ *                     type: string
  */
 router.get("/", fonController.getAllFons);
 
@@ -27,7 +47,8 @@ router.get("/", fonController.getAllFons);
  * @swagger
  * /api/fons:
  *   post:
- *     summary: Add a new background image
+ *     summary: Yangi fon rasmini qo'shish
+ *     description: Authenticated user fon rasm va nomini yuklaydi.
  *     tags: [Fons]
  *     security:
  *       - bearerAuth: []
@@ -43,15 +64,15 @@ router.get("/", fonController.getAllFons);
  *             properties:
  *               name:
  *                 type: string
- *                 example: Gray background
+ *                 example: Dark theme background
  *               image:
  *                 type: string
  *                 format: binary
  *     responses:
  *       201:
- *         description: A new background image has been created
+ *         description: Yangi fon rasm muvaffaqiyatli qo‘shildi
  *       400:
- *         description: No image uploaded
+ *         description: Rasm yuklanmadi yoki noto‘g‘ri format
  */
 router.post("/", authMiddleware, upload.single("image"), fonController.createFon);
 
@@ -59,14 +80,15 @@ router.post("/", authMiddleware, upload.single("image"), fonController.createFon
  * @swagger
  * /api/fons/{id}:
  *   put:
- *     summary: Update background image information
+ *     summary: Fon rasm va nomini yangilash
+ *     description: Faqat token orqali kirgan foydalanuvchi fonni tahrirlashi mumkin.
  *     tags: [Fons]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - name: id
  *         in: path
- *         description: Fon ID
+ *         description: Tahrir qilinadigan fon IDsi
  *         required: true
  *         schema:
  *           type: string
@@ -79,14 +101,15 @@ router.post("/", authMiddleware, upload.single("image"), fonController.createFon
  *             properties:
  *               name:
  *                 type: string
+ *                 example: Light mode
  *               image:
  *                 type: string
  *                 format: binary
  *     responses:
  *       200:
- *         description: background changed
+ *         description: Fon muvaffaqiyatli yangilandi
  *       404:
- *         description: Background not found
+ *         description: Ko‘rsatilgan ID bo‘yicha fon topilmadi
  */
 router.put("/:id", authMiddleware, upload.single("image"), fonController.updateFon);
 
@@ -94,22 +117,23 @@ router.put("/:id", authMiddleware, upload.single("image"), fonController.updateF
  * @swagger
  * /api/fons/{id}:
  *   delete:
- *     summary: Delete a background image
+ *     summary: Fon rasmni o‘chirish
+ *     description: Auth bo‘lgan foydalanuvchi fonni ID bo‘yicha o‘chira oladi.
  *     tags: [Fons]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - name: id
  *         in: path
- *         description: Fon ID
+ *         description: O‘chiriladigan fon IDsi
  *         required: true
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: Background deleted successfully
+ *         description: Fon muvaffaqiyatli o‘chirildi
  *       404:
- *         description: Background not found
+ *         description: Fon topilmadi
  */
 router.delete("/:id", authMiddleware, fonController.deleteFon);
 

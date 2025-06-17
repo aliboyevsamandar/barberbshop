@@ -7,14 +7,14 @@ const authMiddleware = require("../middlewares/auth.middleware");
  * @swagger
  * tags:
  *   name: WorkingDays
- *   description: Working days (for barbers)
+ *   description: Barberlarning ish kunlari bilan bog‘liq amallar
  */
 
 /**
  * @swagger
  * /api/working:
  *   post:
- *     summary: Add a new working day
+ *     summary: Yangi ish kunini qo‘shish
  *     tags: [WorkingDays]
  *     security:
  *       - bearerAuth: []
@@ -41,9 +41,9 @@ const authMiddleware = require("../middlewares/auth.middleware");
  *                 example: false
  *     responses:
  *       201:
- *         description: Created
+ *         description: Ish kuni muvaffaqiyatli qo‘shildi
  *       400:
- *         description: An error occurred
+ *         description: Xatolik yuz berdi
  */
 router.post("/", authMiddleware, WorkingController.createWorkingDay);
 
@@ -51,44 +51,21 @@ router.post("/", authMiddleware, WorkingController.createWorkingDay);
  * @swagger
  * /api/working:
  *   get:
- *     summary: Get all working days
+ *     summary: Barcha ish kunlarini olish
  *     tags: [WorkingDays]
  *     responses:
  *       200:
- *         description: A list of working days
+ *         description: Ish kunlari ro‘yxati
  *       500:
- *         description: Server error
+ *         description: Server xatosi
  */
 router.get("/", WorkingController.getAllWorkingDays);
 
 /**
  * @swagger
  * /api/working/{id}:
- *   get:
- *     summary: Get a working day by ID
- *     tags: [WorkingDays]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Working day ID
- *     responses:
- *       200:
- *         description: Found
- *       404:
- *         description: Not found
- *       500:
- *         description: Server error
- */
-router.put("/:id", authMiddleware, WorkingController.updateWorkingDay);
-
-/**
- * @swagger
- * /api/working/{id}:
- *   delete:
- *     summary: Delete a working day
+ *   put:
+ *     summary: ID orqali ish kunini yangilash
  *     tags: [WorkingDays]
  *     security:
  *       - bearerAuth: []
@@ -98,14 +75,54 @@ router.put("/:id", authMiddleware, WorkingController.updateWorkingDay);
  *         required: true
  *         schema:
  *           type: string
- *         description: Working day ID
+ *         description: Ish kuni IDsi
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               day:
+ *                 type: string
+ *               startTime:
+ *                 type: string
+ *               endTime:
+ *                 type: string
+ *               isClosed:
+ *                 type: boolean
  *     responses:
  *       200:
- *         description: Deleted successfully
+ *         description: Muvaffaqiyatli yangilandi
  *       404:
- *         description: Not found
+ *         description: Topilmadi
  *       500:
- *         description: Server error
+ *         description: Server xatosi
+ */
+router.put("/:id", authMiddleware, WorkingController.updateWorkingDay);
+
+/**
+ * @swagger
+ * /api/working/{id}:
+ *   delete:
+ *     summary: Ish kunini o‘chirish
+ *     tags: [WorkingDays]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Ish kuni IDsi
+ *     responses:
+ *       200:
+ *         description: Muvaffaqiyatli o‘chirildi
+ *       404:
+ *         description: Topilmadi
+ *       500:
+ *         description: Server xatosi
  */
 router.delete("/:id", authMiddleware, WorkingController.deleteWorkingDay);
 

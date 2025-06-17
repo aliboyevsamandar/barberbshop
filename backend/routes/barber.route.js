@@ -23,6 +23,7 @@ const upload = require("../middlewares/upload.middleware");
  *   post:
  *     summary: Add a new barber
  *     tags: [Barbers]
+ *     description: Creates a new barber with name, age, and image.
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -49,7 +50,7 @@ const upload = require("../middlewares/upload.middleware");
  *       201:
  *         description: A new barber has been created
  *       400:
- *         description: No image uploaded
+ *         description: Invalid input or no image uploaded
  */
 router.post("/", upload.single("image"), authMiddleware, createBarber);
 
@@ -59,13 +60,38 @@ router.post("/", upload.single("image"), authMiddleware, createBarber);
  *   get:
  *     summary: Get all barbers
  *     tags: [Barbers]
+ *     description: Returns a list of all barbers.
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: A list of barbers
+ *         description: List of barbers
  */
 router.get("/", authMiddleware, getAllBarbers);
+
+/**
+ * @swagger
+ * /api/barbers/{id}:
+ *   get:
+ *     summary: Get barber by ID
+ *     tags: [Barbers]
+ *     description: Returns a single barber by ID.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Barber ID
+ *     responses:
+ *       200:
+ *         description: Barber found
+ *       404:
+ *         description: Barber not found
+ */
+router.get("/:id", authMiddleware, getBarberById);
 
 /**
  * @swagger
@@ -73,15 +99,16 @@ router.get("/", authMiddleware, getAllBarbers);
  *   put:
  *     summary: Update a barber
  *     tags: [Barbers]
+ *     description: Updates name, age, or image of a barber.
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - name: id
  *         in: path
- *         description: Barber ID
  *         required: true
  *         schema:
  *           type: string
+ *         description: Barber ID
  *     requestBody:
  *       required: true
  *       content:
@@ -91,14 +118,16 @@ router.get("/", authMiddleware, getAllBarbers);
  *             properties:
  *               name:
  *                 type: string
+ *                 example: New Name
  *               age:
  *                 type: number
+ *                 example: 35
  *               image:
  *                 type: string
  *                 format: binary
  *     responses:
  *       200:
- *         description: Barber updated successfully
+ *         description: Barber updated
  *       404:
  *         description: Barber not found
  */
@@ -110,15 +139,16 @@ router.put("/:id", upload.single("image"), authMiddleware, updateBarber);
  *   delete:
  *     summary: Delete a barber
  *     tags: [Barbers]
+ *     description: Deletes a barber by ID.
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - name: id
  *         in: path
- *         description: Barber ID
  *         required: true
  *         schema:
  *           type: string
+ *         description: Barber ID
  *     responses:
  *       200:
  *         description: Barber deleted successfully

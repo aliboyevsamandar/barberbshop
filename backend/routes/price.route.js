@@ -7,14 +7,15 @@ const authMiddleware = require("../middlewares/auth.middleware");
  * @swagger
  * tags:
  *   name: Prices
- *   description: Working with prices
+ *   description: Xizmatlar narxlarini boshqarish
  */
 
 /**
  * @swagger
  * /api/prices:
  *   post:
- *     summary: Add a new price
+ *     summary: Yangi narx qo‘shish
+ *     description: Foydalanuvchi (token bilan) yangi xizmat va uning narxini qo‘shadi.
  *     tags: [Prices]
  *     security:
  *       - bearerAuth: []
@@ -30,15 +31,15 @@ const authMiddleware = require("../middlewares/auth.middleware");
  *             properties:
  *               name:
  *                 type: string
- *                 example: Getting a haircut
+ *                 example: Soch olish
  *               price:
  *                 type: number
  *                 example: 30000
  *     responses:
  *       201:
- *         description: A new price has been added
+ *         description: Yangi narx muvaffaqiyatli qo‘shildi
  *       400:
- *         description: Invalid data
+ *         description: Noto‘g‘ri ma'lumot yuborildi
  */
 router.post("/", authMiddleware, PriceController.createPrice);
 
@@ -46,11 +47,31 @@ router.post("/", authMiddleware, PriceController.createPrice);
  * @swagger
  * /api/prices:
  *   get:
- *     summary: Get all prices
+ *     summary: Barcha narxlarni olish
+ *     description: Tizimdagi barcha xizmat narxlarini ro‘yxatini olish.
  *     tags: [Prices]
  *     responses:
  *       200:
- *         description: A list of prices
+ *         description: Narxlar muvaffaqiyatli olindi
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                   name:
+ *                     type: string
+ *                     example: Soch olish
+ *                   price:
+ *                     type: number
+ *                     example: 30000
+ *                   createdAt:
+ *                     type: string
+ *                   updatedAt:
+ *                     type: string
  */
 router.get("/", PriceController.getAllPrices);
 
@@ -58,7 +79,8 @@ router.get("/", PriceController.getAllPrices);
  * @swagger
  * /api/prices/{id}:
  *   put:
- *     summary: Update a price
+ *     summary: Narxni yangilash
+ *     description: Foydalanuvchi (token bilan) mavjud xizmat narxini yangilaydi.
  *     tags: [Prices]
  *     security:
  *       - bearerAuth: []
@@ -66,7 +88,7 @@ router.get("/", PriceController.getAllPrices);
  *       - name: id
  *         in: path
  *         required: true
- *         description: Price ID
+ *         description: Yangilanadigan narx IDsi
  *         schema:
  *           type: string
  *     requestBody:
@@ -78,17 +100,17 @@ router.get("/", PriceController.getAllPrices);
  *             properties:
  *               name:
  *                 type: string
- *                 example: Hair Removal (Updated)
+ *                 example: Soch olish (Yangilangan)
  *               price:
  *                 type: number
  *                 example: 35000
  *     responses:
  *       200:
- *         description: Price updated successfully
+ *         description: Narx muvaffaqiyatli yangilandi
  *       404:
- *         description: Price not found
+ *         description: Narx topilmadi
  *       400:
- *         description: An error occurred
+ *         description: Noto‘g‘ri ma'lumot
  */
 router.put("/:id", authMiddleware, PriceController.updatePrice);
 
@@ -96,7 +118,8 @@ router.put("/:id", authMiddleware, PriceController.updatePrice);
  * @swagger
  * /api/prices/{id}:
  *   delete:
- *     summary: Delete a price
+ *     summary: Narxni o‘chirish
+ *     description: Foydalanuvchi (token bilan) narxni ID orqali o‘chiradi.
  *     tags: [Prices]
  *     security:
  *       - bearerAuth: []
@@ -104,14 +127,14 @@ router.put("/:id", authMiddleware, PriceController.updatePrice);
  *       - name: id
  *         in: path
  *         required: true
- *         description: Price ID
+ *         description: O‘chiriladigan narx IDsi
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: Price deleted successfully
+ *         description: Narx muvaffaqiyatli o‘chirildi
  *       404:
- *         description: Price not found
+ *         description: Narx topilmadi
  */
 router.delete("/:id", authMiddleware, PriceController.deletePrice);
 

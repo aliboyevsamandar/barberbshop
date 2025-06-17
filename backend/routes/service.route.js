@@ -8,14 +8,15 @@ const authMiddleware = require("../middlewares/auth.middleware");
  * @swagger
  * tags:
  *   name: Services
- *   description: Services department
+ *   description: Xizmatlar bo‘limi (qo‘shish, yangilash, o‘chirish, olish)
  */
 
 /**
  * @swagger
  * /api/services:
  *   post:
- *     summary: Add a new service
+ *     summary: Yangi xizmat qo‘shish
+ *     description: Admin yoki autentifikatsiyadan o‘tgan foydalanuvchi yangi xizmat qo‘shadi. Rasm ham yuklanadi.
  *     tags: [Services]
  *     security:
  *       - bearerAuth: []
@@ -33,10 +34,10 @@ const authMiddleware = require("../middlewares/auth.middleware");
  *             properties:
  *               name:
  *                 type: string
- *                 example: Getting a haircut
+ *                 example: Soch olish
  *               description:
  *                 type: string
- *                 example: Professional hair cutting service
+ *                 example: Professional soch olish xizmati
  *               price:
  *                 type: number
  *                 example: 50000
@@ -45,9 +46,9 @@ const authMiddleware = require("../middlewares/auth.middleware");
  *                 format: binary
  *     responses:
  *       201:
- *         description: Created
+ *         description: Xizmat muvaffaqiyatli qo‘shildi
  *       400:
- *         description: An error occurred
+ *         description: Noto‘g‘ri ma'lumot yuborildi
  */
 router.post("/", authMiddleware, upload.single("image"), ServiceController.createService);
 
@@ -55,11 +56,33 @@ router.post("/", authMiddleware, upload.single("image"), ServiceController.creat
  * @swagger
  * /api/services:
  *   get:
- *     summary: Get all services
+ *     summary: Barcha xizmatlarni olish
+ *     description: Foydalanuvchilar barcha mavjud xizmatlar ro‘yxatini olishadi.
  *     tags: [Services]
  *     responses:
  *       200:
- *         description: A list of services
+ *         description: Xizmatlar muvaffaqiyatli olindi
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                   name:
+ *                     type: string
+ *                   description:
+ *                     type: string
+ *                   price:
+ *                     type: number
+ *                   image:
+ *                     type: string
+ *                   createdAt:
+ *                     type: string
+ *                   updatedAt:
+ *                     type: string
  */
 router.get("/", ServiceController.getAllServices);
 
@@ -67,7 +90,8 @@ router.get("/", ServiceController.getAllServices);
  * @swagger
  * /api/services/{id}:
  *   put:
- *     summary: Update a service
+ *     summary: Xizmatni yangilash
+ *     description: Admin mavjud xizmatni tahrirlaydi (nomi, narxi, tavsifi va rasmi).
  *     tags: [Services]
  *     security:
  *       - bearerAuth: []
@@ -75,7 +99,7 @@ router.get("/", ServiceController.getAllServices);
  *       - in: path
  *         name: id
  *         required: true
- *         description: Service ID
+ *         description: Xizmat IDsi
  *         schema:
  *           type: string
  *     requestBody:
@@ -87,10 +111,10 @@ router.get("/", ServiceController.getAllServices);
  *             properties:
  *               name:
  *                 type: string
- *                 example: Getting a haircut
+ *                 example: Soch olish (yangilangan)
  *               description:
  *                 type: string
- *                 example: Updated service
+ *                 example: Yangilangan xizmat tavsifi
  *               price:
  *                 type: number
  *                 example: 60000
@@ -99,11 +123,11 @@ router.get("/", ServiceController.getAllServices);
  *                 format: binary
  *     responses:
  *       200:
- *         description: Updated successfully
+ *         description: Xizmat muvaffaqiyatli yangilandi
  *       400:
- *         description: An error occurred
+ *         description: Noto‘g‘ri ma'lumot yuborildi
  *       404:
- *         description: Service not found
+ *         description: Xizmat topilmadi
  */
 router.put("/:id", authMiddleware, upload.single("image"), ServiceController.updateService);
 
@@ -111,7 +135,8 @@ router.put("/:id", authMiddleware, upload.single("image"), ServiceController.upd
  * @swagger
  * /api/services/{id}:
  *   delete:
- *     summary: Delete a service
+ *     summary: Xizmatni o‘chirish
+ *     description: Admin xizmatni bazadan o‘chiradi.
  *     tags: [Services]
  *     security:
  *       - bearerAuth: []
@@ -119,14 +144,14 @@ router.put("/:id", authMiddleware, upload.single("image"), ServiceController.upd
  *       - in: path
  *         name: id
  *         required: true
- *         description: Service ID
+ *         description: O‘chiriladigan xizmat IDsi
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: Deleted successfully
+ *         description: Xizmat muvaffaqiyatli o‘chirildi
  *       404:
- *         description: Service not found
+ *         description: Xizmat topilmadi
  */
 router.delete("/:id", authMiddleware, ServiceController.deleteService);
 

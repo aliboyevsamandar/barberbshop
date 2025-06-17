@@ -8,20 +8,20 @@ const upload = require('../middlewares/upload.middleware');
  * @swagger
  * tags:
  *   name: Users
- *   description: Users and Auth operations
+ *   description: Foydalanuvchilar va autentifikatsiya amallari
  */
 
 /**
  * @swagger
  * /api/users:
  *   get:
- *     summary: Get all users
+ *     summary: Barcha foydalanuvchilarni olish
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: A list of users
+ *         description: Foydalanuvchilar ro'yxati
  */
 router.get("/", authMiddleware, userController.getAllUsers);
 
@@ -29,7 +29,7 @@ router.get("/", authMiddleware, userController.getAllUsers);
  * @swagger
  * /api/users/register/step1:
  *   post:
- *     summary: Registration – Step 1
+ *     summary: Ro'yxatdan o'tish – 1-bosqich (emailga kod yuborish)
  *     tags: [Users]
  *     requestBody:
  *       required: true
@@ -50,9 +50,9 @@ router.get("/", authMiddleware, userController.getAllUsers);
  *                 type: string
  *     responses:
  *       200:
- *         description: Code sent to email
+ *         description: Emailga kod yuborildi
  *       400:
- *         description: An error occurred
+ *         description: Xatolik yuz berdi
  */
 router.post('/register/step1', userController.registerStep1);
 
@@ -60,7 +60,7 @@ router.post('/register/step1', userController.registerStep1);
  * @swagger
  * /api/users/register/step2:
  *   post:
- *     summary: Registration – Step 2 (code verification)
+ *     summary: Ro'yxatdan o'tish – 2-bosqich (kodni tasdiqlash)
  *     tags: [Users]
  *     requestBody:
  *       required: true
@@ -84,9 +84,9 @@ router.post('/register/step1', userController.registerStep1);
  *                 type: string
  *     responses:
  *       201:
- *         description:  User registered successfully
+ *         description: Foydalanuvchi muvaffaqiyatli ro'yxatdan o'tdi
  *       400:
- *         description: An error occurred
+ *         description: Kod noto'g'ri yoki boshqa xatolik
  */
 router.post('/register/step2', userController.registerStep2);
 
@@ -94,7 +94,7 @@ router.post('/register/step2', userController.registerStep2);
  * @swagger
  * /api/users/login:
  *   post:
- *     summary: Login
+ *     summary: Tizimga kirish
  *     tags: [Users]
  *     requestBody:
  *       required: true
@@ -112,9 +112,9 @@ router.post('/register/step2', userController.registerStep2);
  *                 type: string
  *     responses:
  *       200:
- *         description: Successful login
+ *         description: Kirish muvaffaqiyatli amalga oshdi (token qaytariladi)
  *       400:
- *         description: Login error
+ *         description: Login xatoliklari
  */
 router.post('/login', userController.login);
 
@@ -122,7 +122,7 @@ router.post('/login', userController.login);
  * @swagger
  * /api/users/resetpassword/step1:
  *   post:
- *     summary: Password recovery – Step 1 (send code via email)
+ *     summary: Parol tiklash – 1-bosqich (emailga kod yuborish)
  *     tags: [Users]
  *     requestBody:
  *       required: true
@@ -137,9 +137,9 @@ router.post('/login', userController.login);
  *                 type: string
  *     responses:
  *       200:
- *         description: Code sent to email
+ *         description: Kod emailga yuborildi
  *       400:
- *         description: An error occurred
+ *         description: Xatolik yuz berdi
  */
 router.post('/resetpassword/step1', userController.resetPasswordStep1);
 
@@ -147,7 +147,7 @@ router.post('/resetpassword/step1', userController.resetPasswordStep1);
  * @swagger
  * /api/users/resetpassword/step2:
  *   post:
- *     summary: Password recovery – Step 2 (new password and code)
+ *     summary: Parol tiklash – 2-bosqich (yangi parol va kod kiritish)
  *     tags: [Users]
  *     requestBody:
  *       required: true
@@ -168,9 +168,9 @@ router.post('/resetpassword/step1', userController.resetPasswordStep1);
  *                 type: string
  *     responses:
  *       200:
- *         description: Password updated successfully
+ *         description: Parol muvaffaqiyatli yangilandi
  *       400:
- *         description: An error occurred
+ *         description: Kod noto'g'ri yoki boshqa xatolik
  */
 router.post('/resetpassword/step2', userController.resetPasswordStep2);
 
@@ -178,7 +178,7 @@ router.post('/resetpassword/step2', userController.resetPasswordStep2);
  * @swagger
  * /api/users/{id}:
  *   put:
- *     summary: Update a user (with image)
+ *     summary: Foydalanuvchini yangilash (rasm bilan)
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -190,7 +190,7 @@ router.post('/resetpassword/step2', userController.resetPasswordStep2);
  *         required: true
  *         schema:
  *           type: string
- *         description: User ID
+ *         description: Foydalanuvchi IDsi
  *     requestBody:
  *       required: false
  *       content:
@@ -207,9 +207,9 @@ router.post('/resetpassword/step2', userController.resetPasswordStep2);
  *                 format: binary
  *     responses:
  *       200:
- *         description: Updated successfully
+ *         description: Foydalanuvchi yangilandi
  *       400:
- *         description: An error occurred
+ *         description: Yangilashda xatolik yuz berdi
  */
 router.put("/:id", upload.single("image"), authMiddleware, userController.updateUser);
 
@@ -217,7 +217,7 @@ router.put("/:id", upload.single("image"), authMiddleware, userController.update
  * @swagger
  * /api/users/{id}:
  *   delete:
- *     summary: Delete a user
+ *     summary: Foydalanuvchini o'chirish
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -227,12 +227,12 @@ router.put("/:id", upload.single("image"), authMiddleware, userController.update
  *         required: true
  *         schema:
  *           type: string
- *         description: User ID
+ *         description: Foydalanuvchi IDsi
  *     responses:
  *       200:
- *         description: Deleted successfully
+ *         description: Foydalanuvchi muvaffaqiyatli o'chirildi
  *       404:
- *         description: User not found
+ *         description: Foydalanuvchi topilmadi
  */
 router.delete("/:id", authMiddleware, userController.deleteUser);
 
