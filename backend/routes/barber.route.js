@@ -3,7 +3,6 @@ const router = express.Router();
 const {
   createBarber,
   getAllBarbers,
-  getBarberById,
   updateBarber,
   deleteBarber,
 } = require("../controllers/barber.controller");
@@ -68,30 +67,6 @@ router.post("/", upload.single("image"), authMiddleware, createBarber);
  *         description: List of barbers
  */
 router.get("/", authMiddleware, getAllBarbers);
-
-/**
- * @swagger
- * /api/barbers/{id}:
- *   get:
- *     summary: Get barber by ID
- *     tags: [Barbers]
- *     description: Returns a single barber by ID.
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - name: id
- *         in: path
- *         required: true
- *         schema:
- *           type: string
- *         description: Barber ID
- *     responses:
- *       200:
- *         description: Barber found
- *       404:
- *         description: Barber not found
- */
-router.get("/:id", authMiddleware, getBarberById);
 
 /**
  * @swagger
